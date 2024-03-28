@@ -12,11 +12,26 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        Todo App
+                        Daily Routines
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="input-group">
+                                <input type="text" id="txtObjectName" class="form-control">
+                                
+                                <button type="submit" class="btn btn-primary" id="btnAddNewObject"> Add </button>
+                            
+                            </div>
+                        </form>
                     </div>
                 </div>
 
                 <div class="card mt-3">
+                    <div class="card-header">
+                        
+                        <button class="btn btn-danger btn-sm float-end" id="btnDelete"> Clear </button>
+                    
+                    </div>
                     <ul id="task-list" class="list-group list-group-flush">
                         
                     </ul>
@@ -28,32 +43,74 @@
 
     <script>
         "use scrict";
-        let sonuc;
-
-        let ul = document.getElementById("task-list");
         
-        // let count = ul.children.length;
-
-        let gorevlistesi = [
-            {"id": 1, "gorev": "Gorev 1"},
-            {"id": 2, "gorev": "Gorev 2"},
-            {"id": 3, "gorev": "Gorev 3"},
-            {"id": 4, "gorev": "Gorev 4"},
+        let routines = [
+            {"id": 1, "routine": "Gorev 1"},
+            {"id": 2, "routine": "Gorev 2"},
+            {"id": 3, "routine": "Gorev 3"},
+            {"id": 4, "routine": "Gorev 4"},
         ]
-        for(let gorev of gorevlistesi){
-            let li = `
-                <li class="task list-group-item">
-                    <div class="form-check">
-                        <input type="checkbox" id="${gorev.id}" class="form-check-input">
-                        <label for="${gorev.id}" class="form-check-label">${gorev.gorev}</label>
-                    </div>
-                </li>
-            `
-            // Olusturulan li objesinin ul elemani icine eklenme
-            ul.insertAdjacentHTML("beforeend", li)
-            console.log(li)
+
+        // Run function when the page loads 
+        printRoutines();
+
+        function printRoutines(){
+            let ul = document.getElementById("task-list");
+            
+            ul.innerHTML = "";
+            
+            // let count = ul.children.length;
+
+            for(let routine of routines){
+
+                let li = `
+                    <li class="task list-group-item">
+                        <div class="form-check">
+                            <input type="checkbox" id="${routine.id}" class="form-check-input">
+                            <label for="${routine.id}" class="form-check-label">${routine.routine}</label>
+                        </div>
+                    </li>
+                `;
+                // Olusturulan li objesinin ul elemani icine eklenme
+                ul.insertAdjacentHTML("beforeend", li);
+            
+                // console.log(li)
+            }
         }
+
+        // Events
+
+        let btnAdd = document.querySelector("#btnAddNewObject");
         
+        btnAdd.addEventListener("click", addObject);
+
+        let pressEnter = document.querySelector("#btnAddNewObject");
+        
+        pressEnter.addEventListener("keypress", function(){
+            if(event.key == "Enter"){
+                document.getElementById("btnAddNewObject").click();
+            }
+        });
+        
+        function addObject(event){
+
+            let objectInput = document.querySelector("#txtObjectName");
+
+            if (objectInput.value == ""){
+                alert("Please enter a routine");
+            }
+
+            else{
+                routines.push({"id": routines.length + 1, "routine": objectInput.value});
+                objectInput.value = "";
+                printRoutines();
+            }
+            
+            event.preventDefault();
+        }
+
+        // let btnDelete = document.querySelector("#btnDelete");
+        // btnDelete.addEventListener("click", addObject);
     </script>
 </body>
 
