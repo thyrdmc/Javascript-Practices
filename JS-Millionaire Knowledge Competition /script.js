@@ -31,7 +31,9 @@ const competetion = new Competetion(questions);
 
 
 document.querySelector(".btn-start").addEventListener("click", function(){
+
     if(competetion.questions.length != competetion.questionNumber){
+        document.querySelector(".quiz_box").classList.add("active");
         console.log(competetion.getQuestion());
         competetion.questionNumber += 1;
     }
