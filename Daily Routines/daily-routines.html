@@ -83,23 +83,60 @@
     <script>
         "use scrict";
         
-        let routines = [
-            {"id": 1, "routine": "Gorev 1", "status": "completed"},
-            {"id": 2, "routine": "Gorev 2", "status": "pending"},
-            {"id": 3, "routine": "Gorev 3", "status": "completed"},
-            {"id": 4, "routine": "Gorev 4", "status": "pending"},
-        ]
+        let routines = [];
 
         let editId;
+
         let isEditable = false;
+
+        const btnAdd = document.querySelector("#btnAddNewObject");
+
+        const pressEnter = document.querySelector("#btnAddNewObject");
 
         const btnDelete = document.querySelector("#btnDelete");
 
         const objectInput = document.querySelector("#txtObjectName");
+        
         const filters = document.querySelectorAll(".filters span")
         
+        // Get data to Local Store
+        if(localStorage.getItem("routines") !==  null){
+            routines = JSON.parse(localStorage.getItem("routines"));
+        }
+
         // Run function when the page loads 
         printRoutines(document.querySelector("span.active").id);
+
+        // Mark routine as completed or pending
+        
+        for(let span of filters){
+            span.addEventListener("click", function(){
+                document.querySelector("span.active").classList.remove("active");
+                span.classList.add("active");
+                printRoutines(span.id);
+            })
+        }
+
+        // ## Events
+    
+        btnAdd.addEventListener("click", createRoutine);
+      
+        pressEnter.addEventListener("keypress", function(){
+            if(event.key == "Enter"){
+                document.getElementById("btnAddNewObject").click();
+            }
+        });
+        
+        btnDelete.addEventListener("click", function(){
+            routines.splice(0, routines.length);
+
+            localStorage.setItem("routines", JSON.stringify(routines));
+
+            printRoutines("all");
+        })
+
+
+        // ## Functions
 
         function printRoutines(filter){
             let ul = document.getElementById("task-list");
@@ -114,7 +151,6 @@
                 let completed = routine.status == "completed" ? "checked" : ""; 
 
                 if(filter == routine.status || filter == "all"){
-
                     let li = `
                         <li class="task list-group-item">
                             <div class="form-check">
@@ -133,40 +169,11 @@
                         </li>
                     `;
                     
-                    // Olusturulan li objesinin ul elemani icine eklenme
+                    // Inserting the created li object into the ul element
                     ul.insertAdjacentHTML("beforeend", li);
                 }
                 
-                // console.log(li)
             }
-        }
-
-        // Events
-
-        let btnAdd = document.querySelector("#btnAddNewObject");
-        
-        btnAdd.addEventListener("click", createRoutine);
-
-        let pressEnter = document.querySelector("#btnAddNewObject");
-        
-        pressEnter.addEventListener("keypress", function(){
-            if(event.key == "Enter"){
-                document.getElementById("btnAddNewObject").click();
-            }
-        });
-        
-
-        btnDelete.addEventListener("click", function(){
-            routines.splice(0, routines.length);
-            printRoutines("all");
-        })
-
-        for(let span of filters){
-            span.addEventListener("click", function(){
-                document.querySelector("span.active").classList.remove("active");
-                span.classList.add("active");
-                printRoutines(span.id);
-            })
         }
 
         function createRoutine(event){
@@ -178,19 +185,25 @@
             else{
 
                 if(!isEditable){
-                    routines.push({"id": routines.length + 1, "routine": objectInput.value});
+                    routines.push({"id": routines.length + 1, "routine": objectInput.value, "status": "pending"});
                 }
 
                 else{
                     for(let routine of routines){
+
                         if(routine.id == editId){
                             routine.routine = objectInput.value;
                         }
+
                         isEditable = false;
                     }
                 }
                 objectInput.value = "";
+
+                localStorage.setItem("routines", JSON.stringify(routines));
+
                 printRoutines(document.querySelector("span.active").id);
+                
             }
             
             event.preventDefault();
@@ -201,41 +214,58 @@
             deletedId =  routines.findIndex(routine => routine.id == id);
 
             routines.splice(deletedId, 1);
+
+            localStorage.setItem("routines", JSON.stringify(routines));
+
             printRoutines(document.querySelector("span.active").id);
         }
 
         function updateRoutine(id, name) {
+
             editId = id;
+
             isEditable = true;
+
             objectInput.value = name;
 
             objectInput.focus();
 
             objectInput.classList.add("active");
-            
+
+            localStorage.setItem("routines", JSON.stringify(routines));
+
             printRoutines(document.querySelector("span.active").id);
         }
    
         function updateStatus(checkbox){
+
             let label = checkbox.nextElementSibling;
+
             let status;
+
             if(checkbox.checked){
                 label.classList.add("checked");
                 status = "completed";
             }
+
             else{
                 label.classList.remove("checked");
                 status = "pending";
             }
 
             for(let routine of routines){
+
                 if(routine.id == checkbox.id){
                     routine.status = status;
                 }
             }
+
+            localStorage.setItem("routines", JSON.stringify(routines));
+
             printRoutines(document.querySelector("span.active").id);
         }
-   </script>
+  
+  </script>
 </body>
 
 </html>
