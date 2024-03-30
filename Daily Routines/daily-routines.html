@@ -16,6 +16,9 @@
             align-items: center;
             justify-content: space-between;
         }
+        .task label.checked{
+            text-decoration: line-through;
+        }
     </style>
 
     <title>Document</title>
@@ -61,15 +64,19 @@
         "use scrict";
         
         let routines = [
-            {"id": 1, "routine": "Gorev 1"},
-            {"id": 2, "routine": "Gorev 2"},
-            {"id": 3, "routine": "Gorev 3"},
-            {"id": 4, "routine": "Gorev 4"},
+            {"id": 1, "routine": "Gorev 1", "status": "completed"},
+            {"id": 2, "routine": "Gorev 2", "status": "pending"},
+            {"id": 3, "routine": "Gorev 3", "status": "completed"},
+            {"id": 4, "routine": "Gorev 4", "status": "pending"},
         ]
 
-        let objectInput = document.querySelector("#txtObjectName");
-        let isEditable = false;
         let editId;
+        let isEditable = false;
+
+        const btnDelete = document.querySelector("#btnDelete");
+
+        let objectInput = document.querySelector("#txtObjectName");
+        
         
         // Run function when the page loads 
         printRoutines();
@@ -83,11 +90,13 @@
 
             for(let routine of routines){
 
+                // If status of object completed, assign checked to completed object
+                let completed = routine.status == "completed" ? "checked" : ""; 
                 let li = `
                     <li class="task list-group-item">
                         <div class="form-check">
-                            <input type="checkbox" id="${routine.id}" class="form-check-input">
-                            <label for="${routine.id}" class="form-check-label">${routine.routine}</label>
+                            <input type="checkbox" onclick="updateStatus(this)" id="${routine.id}" class="form-check-input" ${completed}>
+                            <label for="${routine.id}" class="form-check-label ${completed}">${routine.routine}</label>
                         </div>
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -120,6 +129,13 @@
                 document.getElementById("btnAddNewObject").click();
             }
         });
+        
+
+        btnDelete.addEventListener("click", function(){
+            routines.splice(0, routines.length);
+            printRoutines();
+        })
+
         
         function addObject(event){
 
@@ -167,7 +183,27 @@
             
             printRoutines();
         }
-    </script>
+   
+        function updateStatus(checkbox){
+            let label = checkbox.nextElementSibling;
+            let status;
+            if(checkbox.checked){
+                label.classList.add("checked");
+                status = "completed";
+            }
+            else{
+                label.classList.remove("checked");
+                status = "pending";
+            }
+
+            for(let routine of routines){
+                if(routine.id == checkbox.id){
+                    routine.status = status;
+                }
+            }
+            printRoutines();
+        }
+   </script>
 </body>
 
 </html>
