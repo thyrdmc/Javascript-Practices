@@ -67,6 +67,10 @@
             {"id": 4, "routine": "Gorev 4"},
         ]
 
+        let objectInput = document.querySelector("#txtObjectName");
+        let isEditable = false;
+        let editId;
+        
         // Run function when the page loads 
         printRoutines();
 
@@ -91,7 +95,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a onclick="deleteRoutine(${routine.id})" class="dropdown-item" href="#"><i class="fa-solid fa-trash"></i> Delete</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen-nib"></i> Update</a></li>
+                                <li><a onclick='updateRoutine(${routine.id},"${routine.routine}")' class="dropdown-item" href="#"><i class="fa-solid fa-pen-nib"></i> Update</a></li>
                             </ul>
                         </div>
                     </li>
@@ -119,14 +123,24 @@
         
         function addObject(event){
 
-            let objectInput = document.querySelector("#txtObjectName");
-
             if (objectInput.value == ""){
                 alert("Please enter a routine");
             }
 
             else{
-                routines.push({"id": routines.length + 1, "routine": objectInput.value});
+
+                if(!isEditable){
+                    routines.push({"id": routines.length + 1, "routine": objectInput.value});
+                }
+
+                else{
+                    for(let routine of routines){
+                        if(routine.id == editId){
+                            routine.routine = objectInput.value;
+                        }
+                        isEditable = false;
+                    }
+                }
                 objectInput.value = "";
                 printRoutines();
             }
@@ -139,6 +153,18 @@
             deletedId =  routines.findIndex(routine => routine.id == id);
 
             routines.splice(deletedId, 1);
+            printRoutines();
+        }
+
+        function updateRoutine(id, name) {
+            editId = id;
+            isEditable = true;
+            objectInput.value = name;
+
+            objectInput.focus();
+
+            objectInput.classList.add("active");
+            
             printRoutines();
         }
     </script>
