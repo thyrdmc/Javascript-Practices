@@ -11,24 +11,32 @@
 </head>
 <body>
     <div class="btn-start">
-        <button class="btn btn-warning btn-lg"> Start Competetion</button>
+        <button class="btn btn-warning btn-lg"> Start Competetion </button>
     </div>
     
     <div class="card quiz_box">
 
         <header class="card-header">
-            <div class="title">Js Millionaire Knowledge Competetion</div>
+            <div class="title"> Js Millionaire Knowledge Competetion </div>
+            
+            <div class="timer">
+                <div class="timer_text"> Remaining Time : </div>
+                <div class="time_second"> 10 </div>
+            </div>
+            
+            <div class="timeline"></div>
+
         </header>
 
         <section class="card-body">
             <div class="question_text">
-                <span>
+                <!-- <span>
                     1-Question 1
-                </span>
+                </span> -->
             </div>
 
             <div class="option_list">
-                <div class="option">
+                <!-- <div class="option">
                     <span>a: Answer 1</span>
                     <div class="icon"><i class="fas fa-check"></i></div>
                 </div>
@@ -46,10 +54,32 @@
                 <div class="option incorrect">
                     <span>d: Answer 4</span>
                     <div class="icon"><i class="fas fa-times"></i></div>
-                </div>
+                </div> -->
             </div>
         </section>
+
+        <footer class="card-footer">
+            <div class="question_index">
+                
+            </div>
+
+            <button class="btn-next btn btn-primary btn-sm">Next Question</button>
+        </footer>
     </div>
+
+    <div class="card score_box">
+        <div class="icon"><i class="fas fa-crown"></i></div>
+        <div class="score_text"></div>
+        <div class="buttons">
+            <button class="btn btn-primary btn-replay">Try Again</button>
+            <button class="btn btn-primary btn-exit">Go Homepage</button>
+        </div>
+    </div>
+    <script src="ui.js"></script>
+    <script src="question.js"></script>
+    <script src="competetion.js"></script>
     <script src="script.js"></script>
+    
+
 </body>
 </html>
