@@ -130,6 +130,58 @@
             
         }
         
+        function setNeighbors(datas){
+            let html = "";
+            for(let data of datas){
+                html += `
+                    <div class="col-2 mt-2">
+                        <div class="card">
+                            <img src="${data.flags.png}" alt="" class="card-img-top">
+                            <div class="card-body">
+                                <h6 class="card-title">${data.name.common}</h6>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.querySelector("#neighbors").innerHTML = html;
+            }
+        }
+        
+        // Success Error Message Functions
+
+        function throwError(error){
+            let html = `
+                    <div class="alert alert-danger">
+                        ${error.message}
+                    </div>
+            `;
+
+            document.querySelector("#errors").innerHTML = html;
+
+            setTimeout(function(){
+                document.querySelector("#errors").innerHTML = "";
+            }, 3000);
+        }
+        
+        function onError(err){
+            document.querySelector("#loading").style.display = "none";
+        }
+
+        async function onSuccess(position){
+
+            const apikey = "4153e89b084c477e81d48143841ae34b";
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}%2C${position.coords.longitude}&key=${apikey}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const country = data.results[0].components.country;
+            
+            document.querySelector("#txtSearch").value = country;
+            document.querySelector("#btnSearch").click();
+
+        }
         
     </script>
 </body>
