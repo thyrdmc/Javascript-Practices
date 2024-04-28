@@ -130,25 +130,7 @@
             
         }
         
-        function setNeighbors(datas){
-            let html = "";
-            for(let data of datas){
-                html += `
-                    <div class="col-2 mt-2">
-                        <div class="card">
-                            <img src="${data.flags.png}" alt="" class="card-img-top">
-                            <div class="card-body">
-                                <h6 class="card-title">${data.name.common}</h6>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                document.querySelector("#neighbors").innerHTML = html;
-            }
-        }
         
-
     </script>
 </body>
 </html>
